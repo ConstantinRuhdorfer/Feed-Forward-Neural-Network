@@ -29,29 +29,45 @@ class neuralNetwork {
     double outputLayer[MAX_OUTPUT_LAYER_SIZE + 1];
 
    public:
+    /**
+     * Constructors
+     */
     neuralNetwork()
         : inNeurons(DEFAULT_IN_NEURONS),
           hiddenNeurons(DEFAULT_HIDDEN_NEURONS),
           outNeurons(DEFAULT_OUT_NEURONS),
           epsilon(DEFAULT_EPSILON),
           learningrate(DEFAULT_LEARNINGRATE){};
-    neuralNetwork(int inLayer, int hiddenLayer, int outLayer)
-        : inNeurons(inLayer),
-          hiddenNeurons(hiddenLayer),
-          outNeurons(outLayer),
+    neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons)
+        : inNeurons(inNeurons),
+          hiddenNeurons(hiddenNeurons),
+          outNeurons(outNeurons),
           epsilon(DEFAULT_EPSILON),
           learningrate(DEFAULT_LEARNINGRATE){};
-    neuralNetwork(int inLayer, int hiddenLayer, int outLayer, double epsilon,
-                  double learningrate)
-        : inNeurons(inLayer),
-          hiddenNeurons(hiddenLayer),
-          outNeurons(outLayer),
+    neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons,
+                  double epsilon, double learningrate)
+        : inNeurons(inNeurons),
+          hiddenNeurons(hiddenNeurons),
+          outNeurons(outNeurons),
           epsilon(epsilon),
           learningrate(learningrate){};
+    /**
+     * Getters
+     */
     int getInNeurons() { return inNeurons; };
     int getHiddenNeurons() { return hiddenNeurons; };
     int getOutNeurons() { return outNeurons; };
     double getEpsilon() { return epsilon; };
     double getLearningrate() { return learningrate; };
-    ~neuralNetwork();
+    /**
+     * Various activation functions
+     */
+    double calcSigmoid(int x);
+    double calcFastSigmoid(int x);
+    double calcRelu(int x);
+    double calcRelu6(int x);
+    /**
+     * Destructor
+     */
+    ~neuralNetwork(){};
 };
