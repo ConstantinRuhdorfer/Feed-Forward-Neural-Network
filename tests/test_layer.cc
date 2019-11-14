@@ -1,12 +1,12 @@
 #include <catch.h>
 #include <layer.h>
 
-Layer l(10);
-
 TEST_CASE("1: Basic constructor layer", "[multi-file:2]") {
+    Layer l(10);
+
     REQUIRE(l.getData().size() == 10);
-    for (int i = 0; i < l.getData().size(); i++) {
-        REQUIRE(l.getData(i) == 0.0);
+    for (int i = 0; i < (int)l.getData().size(); i++) {
+        REQUIRE((unsigned)l.getData(i) == 0.0);
     }
     REQUIRE(l.getNumNeurons() == 10);
     REQUIRE(l.getThreshold() == 1);

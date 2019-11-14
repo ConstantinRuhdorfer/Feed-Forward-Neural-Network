@@ -4,12 +4,13 @@
 
 class Layer {
    private:
-    const int numNeurons = 0;
+    const unsigned int numNeurons = 0;
     Eigen::VectorXd data;
     int threshold;
 
    public:
     Layer(unsigned int numNeurons);
+    ~Layer(){};
     /**
      * Getter
      */

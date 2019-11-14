@@ -11,6 +11,13 @@ Connection::Connection(int nRow, int nCol) : weights(0, 0) {
 }
 
 /**
+ * Use with caution or consistent testing.
+ */
+void Connection::overrideWeights(Eigen::MatrixXd newWeights) {
+    weights = newWeights;
+}
+
+/**
  *
  */
 void Connection::addWeight(int rowIndex, int colIndex, double data) {

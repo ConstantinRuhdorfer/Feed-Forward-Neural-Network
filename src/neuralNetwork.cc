@@ -1,7 +1,7 @@
 #include <layer.h>
-#include <math.h>
+#include <cmath>
 #include <neuralNetwork.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <algorithm>
 #include <eigen3/Eigen/Dense>
 
@@ -16,24 +16,24 @@
 /**
  *
  */
-double NeuralNetwork::calcFastSigmoid(int x) {
+double NeuralNetwork::calcFastSigmoid(double x) {
     return ((double)x / (1 + abs(x)));
 }
 
 /**
  *
  */
-double NeuralNetwork::calcSigmoid(int x) { return 1.0 / (1 + exp(-x)); }
+double NeuralNetwork::calcSigmoid(double x) { return 1.0 / (1 + exp(-x)); }
 
 /**
  *
  */
-double NeuralNetwork::calcRelu(int x) { return std::max(0, x); }
+double NeuralNetwork::calcReLu(double x) { return std::max(0.0, x); }
 
 /**
  *
  */
-double NeuralNetwork::calcRelu6(int x) { return std::min(std::max(0, x), 6); }
+double NeuralNetwork::calcReLu6(double x) { return std::min((double)std::max(0.0, x), 6.0); }
 
 /*---------------------------------------------------------------------*/
 /*                        Public                                       */
@@ -42,7 +42,7 @@ double NeuralNetwork::calcRelu6(int x) { return std::min(std::max(0, x), 6); }
 /**
  *
  */
-double NeuralNetwork::calcActivation(int x) {
+double NeuralNetwork::calcActivation(double x) {
     switch (currentActivationFunction) {
         case sigmoid:
             return calcSigmoid(x);
@@ -51,12 +51,14 @@ double NeuralNetwork::calcActivation(int x) {
             return calcFastSigmoid(x);
             break;
         case ReLu:
-            return calcRelu(x);
+            return calcReLu(x);
             break;
         case ReLu6:
-            return calcRelu6(x);
+            return calcReLu6(x);
             break;
         default:
+            throw std::invalid_argument(
+                "Was not one of Sigmoid, fast Sigmoid, ReLu or ReLu6.");
             break;
     }
 };
@@ -74,9 +76,9 @@ void NeuralNetwork::initialize() {
     hiddenLayer = new Layer(hiddenNeurons);
     outputLayer = new Layer(outNeurons);
 
-    // initialize the weight matricies
-    inToHidden = new Connection(inNeurons, hiddenNeurons);
-    hiddenToOut = new Connection(hiddenNeurons, outNeurons);
+    // initialize the weight matrices
+    inToHidden = new Connection((int)inNeurons, (int)hiddenNeurons);
+    hiddenToOut = new Connection((int)hiddenNeurons, (int)outNeurons);
 
     learend = false;
 };
@@ -95,12 +97,12 @@ void NeuralNetwork::initialize() {
 double NeuralNetwork::calcEnergy(Eigen::VectorXd groundTruth,
                                  Eigen::VectorXd netOutput) {
     double energy = 0;
-    for (int i = 0; i < netOutput.size(); i++) {
+    for (int i = 0; i < (int)netOutput.size(); i++) {
         energy +=
             (groundTruth(i) - netOutput(i)) * (groundTruth(i) - netOutput(i));
     }
 
-    return (energy /= 2.0);
+    return energy /= 2.0;
 }
 
 /**
@@ -109,19 +111,19 @@ double NeuralNetwork::calcEnergy(Eigen::VectorXd groundTruth,
 void NeuralNetwork::propagate() {
     inputLayer->setThreshold(1);
 
-    for (int i = 0; i < hiddenNeurons; i++) {
+    for (int i = 0; i < (int)hiddenNeurons; i++) {
         double net = 0;
-        for (int j = 0; j < inNeurons; j++) {
+        for (int j = 0; j < (int)inNeurons; j++) {
             net += inToHidden->getWeights(j, i) * inputLayer->getData(j);
             hiddenLayer->setData(i, calcActivation(net));
         }
     }
 
-    for (int i = 0; i < outNeurons; i++) {
+    for (int i = 0; i < (int)outNeurons; i++) {
         double net = 0;
-        for (int j = 0; j < hiddenNeurons; j++) {
-            net += hiddenToOut->getWeights(j, i) * hiddenLayer->getData(j);
-            outputLayer->setData(i, calcActivation(net));
+        for (int j = 0; j < (int)hiddenNeurons; j++) {
+            net += hiddenToOut->getWeights((int)j, (int)i) * hiddenLayer->getData(j);
+            outputLayer->setData((int)i, calcActivation(net));
         }
     }
 }
@@ -136,24 +138,24 @@ void NeuralNetwork::backpropagate(Eigen::VectorXd teach) {
     double delta = 0;
 
     if (epsilon < e) {
-        for (int i = 0; i < outNeurons; i++) {
+        for (int i = 0; i < (int)outNeurons; i++) {
             double y = outputLayer->getData(i);
             delta = (teach(i) - y) * y * (1 - y);
 
-            for (int j = 0; j < hiddenNeurons; j++) {
+            for (int j = 0; j < (int)hiddenNeurons; j++) {
                 deltaH(j) += delta * hiddenToOut->getWeights(j, i);
                 hiddenToOut->addWeight(
-                    j, i, (learningrate * delta * hiddenLayer->getData(j)));
+                        j, i, (learningrate * delta * hiddenLayer->getData(j)));
             }
         }
 
-        for (int i = 0; i < hiddenNeurons; i++) {
+        for (int i = 0; i < (int)hiddenNeurons; i++) {
             delta = deltaH(i) * hiddenLayer->getData(i) *
                     (1 - hiddenLayer->getData(i));
 
-            for (int j = 0; j < inNeurons; j++) {
+            for (int j = 0; j < (int)inNeurons; j++) {
                 inToHidden->addWeight(
-                    j, i, (learningrate * delta * inputLayer->getData(j)));
+                        j, i, (learningrate * delta * inputLayer->getData(j)));
             }
         }
     }
@@ -169,7 +171,7 @@ void NeuralNetwork::step(Eigen::VectorXd input, Eigen::VectorXd teach) {
 
     double error = calcEnergy(teach, output);
 
-    printf("Current error: %f\n", error);
+    // printf("Current error: %f\n", error);
 
     if (error > epsilon) {
         backpropagate(teach);

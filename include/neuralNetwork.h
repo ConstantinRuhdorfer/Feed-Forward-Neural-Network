@@ -51,10 +51,10 @@ class NeuralNetwork {
     /**
      * Various activation functions
      */
-    double calcSigmoid(int x);
-    double calcFastSigmoid(int x);
-    double calcRelu(int x);
-    double calcRelu6(int x);
+    static double calcSigmoid(double x);
+    static double calcFastSigmoid(double x);
+    static double calcReLu(double x);
+    static double calcReLu6(double x);
 
    public:
     /**
@@ -89,11 +89,11 @@ class NeuralNetwork {
      * Destructor
      */
     ~NeuralNetwork() {
-        delete (inputLayer);
-        delete (hiddenLayer);
-        delete (outputLayer);
-        delete (inToHidden);
-        delete (hiddenToOut);
+        delete inputLayer;
+        delete hiddenLayer;
+        delete outputLayer;
+        delete inToHidden;
+        delete hiddenToOut;
     };
     /**
      * Network Learning
@@ -102,11 +102,12 @@ class NeuralNetwork {
     void printInterference(Eigen::VectorXd input);
     void propagate();
     void backpropagate(Eigen::VectorXd teach);
-    double calcActivation(int x);
+    double calcActivation(double x);
     /**
      * Network internals
      */
-    double calcEnergy(Eigen::VectorXd groundTruth, Eigen::VectorXd netOutput);
+    static double calcEnergy(Eigen::VectorXd groundTruth,
+                             Eigen::VectorXd netOutput);
     /**
      * Getters
      */
@@ -119,6 +120,8 @@ class NeuralNetwork {
         return currentActivationFunction;
     };
     bool getHasLearned() { return learend; };
+    Connection* getInToHidden() { return inToHidden; };
+    Connection* getHiddenToOut() { return hiddenToOut; };
     /**
      * Setters
      */
