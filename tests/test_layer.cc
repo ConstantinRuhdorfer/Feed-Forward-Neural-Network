@@ -1,7 +1,7 @@
 #include <catch.h>
 #include <layer.h>
 
-layer l(10);
+Layer l(10);
 
 TEST_CASE("1: Basic constructor layer", "[multi-file:2]") {
     REQUIRE(l.getData().size() == 10);

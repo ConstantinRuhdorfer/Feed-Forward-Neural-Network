@@ -16,24 +16,24 @@
 /**
  *
  */
-double neuralNetwork::calcFastSigmoid(int x) {
+double NeuralNetwork::calcFastSigmoid(int x) {
     return ((double)x / (1 + abs(x)));
 }
 
 /**
  *
  */
-double neuralNetwork::calcSigmoid(int x) { return 1.0 / (1 + exp(-x)); }
+double NeuralNetwork::calcSigmoid(int x) { return 1.0 / (1 + exp(-x)); }
 
 /**
  *
  */
-double neuralNetwork::calcRelu(int x) { return std::max(0, x); }
+double NeuralNetwork::calcRelu(int x) { return std::max(0, x); }
 
 /**
  *
  */
-double neuralNetwork::calcRelu6(int x) { return std::min(std::max(0, x), 6); }
+double NeuralNetwork::calcRelu6(int x) { return std::min(std::max(0, x), 6); }
 
 /*---------------------------------------------------------------------*/
 /*                        Public                                       */
@@ -42,7 +42,7 @@ double neuralNetwork::calcRelu6(int x) { return std::min(std::max(0, x), 6); }
 /**
  *
  */
-double neuralNetwork::calcActivation(int x) {
+double NeuralNetwork::calcActivation(int x) {
     switch (currentActivationFunction) {
         case sigmoid:
             return calcSigmoid(x);
@@ -68,15 +68,15 @@ double neuralNetwork::calcActivation(int x) {
 /**
  * Gets called by all constructors.
  */
-void neuralNetwork::initialize() {
+void NeuralNetwork::initialize() {
     // initialize the layers
-    inputLayer = new layer(inNeurons);
-    hiddenLayer = new layer(hiddenNeurons);
-    outputLayer = new layer(outNeurons);
+    inputLayer = new Layer(inNeurons);
+    hiddenLayer = new Layer(hiddenNeurons);
+    outputLayer = new Layer(outNeurons);
 
     // initialize the weight matricies
-    inToHidden = new connection(inNeurons, hiddenNeurons);
-    hiddenToOut = new connection(hiddenNeurons, outNeurons);
+    inToHidden = new Connection(inNeurons, hiddenNeurons);
+    hiddenToOut = new Connection(hiddenNeurons, outNeurons);
 
     learend = false;
 };
@@ -92,7 +92,7 @@ void neuralNetwork::initialize() {
 /**
  *
  */
-double neuralNetwork::calcEnergy(Eigen::VectorXd groundTruth,
+double NeuralNetwork::calcEnergy(Eigen::VectorXd groundTruth,
                                  Eigen::VectorXd netOutput) {
     double energy = 0;
     for (int i = 0; i < netOutput.size(); i++) {
@@ -106,7 +106,7 @@ double neuralNetwork::calcEnergy(Eigen::VectorXd groundTruth,
 /**
  *
  */
-void neuralNetwork::propagate() {
+void NeuralNetwork::propagate() {
     inputLayer->setThreshold(1);
 
     for (int i = 0; i < hiddenNeurons; i++) {
@@ -129,7 +129,7 @@ void neuralNetwork::propagate() {
 /**
  *
  */
-void neuralNetwork::backpropagate(Eigen::VectorXd teach) {
+void NeuralNetwork::backpropagate(Eigen::VectorXd teach) {
     Eigen::VectorXd deltaH(hiddenLayer->getData().size());
     double e = calcEnergy(outputLayer->getData(), teach);
 
@@ -162,7 +162,7 @@ void neuralNetwork::backpropagate(Eigen::VectorXd teach) {
 /**
  *
  */
-void neuralNetwork::step(Eigen::VectorXd input, Eigen::VectorXd teach) {
+void NeuralNetwork::step(Eigen::VectorXd input, Eigen::VectorXd teach) {
     inputLayer->setData(input);
     propagate();
     Eigen::VectorXd output = outputLayer->getData();
@@ -181,7 +181,7 @@ void neuralNetwork::step(Eigen::VectorXd input, Eigen::VectorXd teach) {
 /**
  *
  */
-void neuralNetwork::printInterference(Eigen::VectorXd input) {
+void NeuralNetwork::printInterference(Eigen::VectorXd input) {
     inputLayer->setData(input);
     propagate();
     Eigen::VectorXd output = outputLayer->getData();

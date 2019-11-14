@@ -2,14 +2,14 @@
 
 #include <eigen3/Eigen/Dense>
 
-class layer {
+class Layer {
    private:
     const int numNeurons = 0;
     Eigen::VectorXd data;
     int threshold;
 
    public:
-    layer(unsigned int numNeurons);
+    Layer(unsigned int numNeurons);
     /**
      * Getter
      */
@@ -22,13 +22,13 @@ class layer {
      */
     void setThreshold(int threshold) { threshold = threshold; };
     void setData(Eigen::VectorXd data) {
-        if (layer::data.size() == data.size()) {
-            layer::data = data;
+        if (Layer::data.size() == data.size()) {
+            Layer::data = data;
         }
     }
     void setData(int index, double data) {
-        if (index < layer::data.size()) {
-            layer::data(index) = data;
+        if (index < Layer::data.size()) {
+            Layer::data(index) = data;
         }
     }
 };

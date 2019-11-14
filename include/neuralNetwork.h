@@ -19,7 +19,7 @@ enum CurrentActivationFunction { sigmoid, fastSigmoid, ReLu, ReLu6 };
 /**
  * Neural network with backpropagation.
  */
-class neuralNetwork {
+class NeuralNetwork {
    private:
     // Network structure:
     const unsigned int inNeurons = 0;
@@ -33,12 +33,12 @@ class neuralNetwork {
     double epsilon = 1.0;
     double learningrate = 0.5;
 
-    layer* inputLayer;
-    layer* hiddenLayer;
-    layer* outputLayer;
+    Layer* inputLayer;
+    Layer* hiddenLayer;
+    Layer* outputLayer;
 
-    connection* inToHidden;
-    connection* hiddenToOut;
+    Connection* inToHidden;
+    Connection* hiddenToOut;
 
     // Wether training is finished...
     bool learend = false;
@@ -60,7 +60,7 @@ class neuralNetwork {
     /**
      * Constructors
      */
-    neuralNetwork()
+    NeuralNetwork()
         : inNeurons(DEFAULT_IN_NEURONS),
           hiddenNeurons(DEFAULT_HIDDEN_NEURONS),
           outNeurons(DEFAULT_OUT_NEURONS),
@@ -68,7 +68,7 @@ class neuralNetwork {
           learningrate(DEFAULT_LEARNINGRATE) {
         initialize();
     };
-    neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons)
+    NeuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons)
         : inNeurons(inNeurons),
           hiddenNeurons(hiddenNeurons),
           outNeurons(outNeurons),
@@ -76,7 +76,7 @@ class neuralNetwork {
           learningrate(DEFAULT_LEARNINGRATE) {
         initialize();
     };
-    neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons,
+    NeuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons,
                   double epsilon, double learningrate)
         : inNeurons(inNeurons),
           hiddenNeurons(hiddenNeurons),
@@ -88,7 +88,13 @@ class neuralNetwork {
     /**
      * Destructor
      */
-    ~neuralNetwork(){};
+    ~NeuralNetwork() {
+        delete (inputLayer);
+        delete (hiddenLayer);
+        delete (outputLayer);
+        delete (inToHidden);
+        delete (hiddenToOut);
+    };
     /**
      * Network Learning
      */

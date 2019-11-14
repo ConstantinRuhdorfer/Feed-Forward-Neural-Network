@@ -1,7 +1,7 @@
 #include <../extern/catch/catch.h>
 #include <neuralNetwork.h>
 
-neuralNetwork NN;
+NeuralNetwork NN;
 
 TEST_CASE("1: Basic constructor NN", "[multi-file:1]") {
     REQUIRE(NN.getInNeurons() == 5);
@@ -46,7 +46,7 @@ TEST_CASE("6: ReLu6", "[multi-file:1]") {
 }
 
 TEST_CASE("7: Simple Training", "[multi-file:1]") {
-    neuralNetwork testNN(2, 1, 2, 0.01, 0.7);
+    NeuralNetwork testNN(2, 1, 2, 0.01, 0.7);
     testNN.setCurrentActivationFunction(sigmoid);
 
     Eigen::MatrixXd testIn(10, 2);
