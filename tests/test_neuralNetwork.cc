@@ -58,13 +58,8 @@ TEST_CASE("7: Simple Training", "[multi-file:1]") {
     inToHidden << 0, 0;
     hiddenToOut << 0, 0;
 
-<<<<<<< HEAD
     testNN.getInToHidden()->overrideWeights(inToHidden);
     testNN.getHiddenToOut()->overrideWeights(hiddenToOut);
-=======
-    testNN.getInToHidden()->overideWeights(inToHidden);
-    testNN.getHiddenToOut()->overideWeights(hiddenToOut);
->>>>>>> d3c25220c7acf26a692c64a178551afca650b83e
 
     testNN.setCurrentActivationFunction(sigmoid);
 
