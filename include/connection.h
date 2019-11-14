@@ -29,6 +29,7 @@ class Connection {
    public:
     Connection(int nRow, int nCol);
     ~Connection(){};
+    void overideWeights(Eigen::MatrixXd newWeights);
     /**
      * Weight calculation
      */

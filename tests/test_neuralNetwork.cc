@@ -47,6 +47,16 @@ TEST_CASE("6: ReLu6", "[multi-file:1]") {
 
 TEST_CASE("7: Simple Training", "[multi-file:1]") {
     NeuralNetwork testNN(2, 1, 2, 0.01, 0.7);
+
+    Eigen::MatrixXd inToHidden(2, 1);
+    Eigen::MatrixXd hiddenToOut(1, 2);
+
+    inToHidden << 0, 0;
+    hiddenToOut << 0, 0;
+
+    testNN.getInToHidden()->overideWeights(inToHidden);
+    testNN.getHiddenToOut()->overideWeights(hiddenToOut);
+
     testNN.setCurrentActivationFunction(sigmoid);
 
     Eigen::MatrixXd testIn(10, 2);
