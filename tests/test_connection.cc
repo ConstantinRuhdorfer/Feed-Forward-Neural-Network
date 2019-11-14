@@ -1,7 +1,7 @@
 #include <catch.h>
 #include <connection.h>
 
-connection c(10, 20);
+Connection c(10, 20);
 
 TEST_CASE("1: Basic constructor connection", "[multi-file:3]") {
     REQUIRE(c.getWeights().size() == 200);

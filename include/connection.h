@@ -2,7 +2,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-class connection {
+class Connection {
    private:
     /**
      * In a fully connected neural network every neuron of
@@ -27,8 +27,8 @@ class connection {
     Eigen::MatrixXd weights;
 
    public:
-    connection(int nRow, int nCol);
-    ~connection(){};
+    Connection(int nRow, int nCol);
+    ~Connection(){};
     /**
      * Weight calculation
      */
