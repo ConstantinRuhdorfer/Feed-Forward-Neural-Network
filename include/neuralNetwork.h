@@ -1,3 +1,8 @@
+#pragma once
+
+#include <connection.h>
+#include <layer.h>
+
 #define MAX_INPUT_LAYER_SIZE 20
 #define MAX_HIDDEN_LAYER_SIZE 40
 #define MAX_OUTPUT_LAYER_SIZE 20
@@ -9,24 +14,47 @@
 #define DEFAULT_EPSILON 1.0
 #define DEFAULT_LEARNINGRATE 0.5
 
+enum CurrentActivationFunction { sigmoid, fastSigmoid, ReLu, ReLu6 };
+
 /**
  * Neural network with backpropagation.
  */
 class neuralNetwork {
    private:
     // Network structure:
-    const int inNeurons = 0;
-    const int hiddenNeurons = 0;
-    const int outNeurons = 0;
+    const unsigned int inNeurons = 0;
+    const unsigned int hiddenNeurons = 0;
+    const unsigned int outNeurons = 0;
+
+    // Current activation function; Default is sigmoid
+    CurrentActivationFunction currentActivationFunction = sigmoid;
 
     // Learning
     double epsilon = 1.0;
     double learningrate = 0.5;
 
-    // Arbitraly choosen restrictions...
-    double inputLayer[MAX_INPUT_LAYER_SIZE + 1];
-    double hiddenLayer[MAX_HIDDEN_LAYER_SIZE + 1];
-    double outputLayer[MAX_OUTPUT_LAYER_SIZE + 1];
+    layer* inputLayer;
+    layer* hiddenLayer;
+    layer* outputLayer;
+
+    connection* inToHidden;
+    connection* hiddenToOut;
+
+    // Wether training is finished...
+    bool learend = false;
+
+    /**
+     * Network housekeeping
+     */
+    void initialize();
+
+    /**
+     * Various activation functions
+     */
+    double calcSigmoid(int x);
+    double calcFastSigmoid(int x);
+    double calcRelu(int x);
+    double calcRelu6(int x);
 
    public:
     /**
@@ -37,20 +65,42 @@ class neuralNetwork {
           hiddenNeurons(DEFAULT_HIDDEN_NEURONS),
           outNeurons(DEFAULT_OUT_NEURONS),
           epsilon(DEFAULT_EPSILON),
-          learningrate(DEFAULT_LEARNINGRATE){};
+          learningrate(DEFAULT_LEARNINGRATE) {
+        initialize();
+    };
     neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons)
         : inNeurons(inNeurons),
           hiddenNeurons(hiddenNeurons),
           outNeurons(outNeurons),
           epsilon(DEFAULT_EPSILON),
-          learningrate(DEFAULT_LEARNINGRATE){};
+          learningrate(DEFAULT_LEARNINGRATE) {
+        initialize();
+    };
     neuralNetwork(int inNeurons, int hiddenNeurons, int outNeurons,
                   double epsilon, double learningrate)
         : inNeurons(inNeurons),
           hiddenNeurons(hiddenNeurons),
           outNeurons(outNeurons),
           epsilon(epsilon),
-          learningrate(learningrate){};
+          learningrate(learningrate) {
+        initialize();
+    };
+    /**
+     * Destructor
+     */
+    ~neuralNetwork(){};
+    /**
+     * Network Learning
+     */
+    void step(Eigen::VectorXd input, Eigen::VectorXd teach);
+    void printInterference(Eigen::VectorXd input);
+    void propagate();
+    void backpropagate(Eigen::VectorXd teach);
+    double calcActivation(int x);
+    /**
+     * Network internals
+     */
+    double calcEnergy(Eigen::VectorXd groundTruth, Eigen::VectorXd netOutput);
     /**
      * Getters
      */
@@ -59,15 +109,14 @@ class neuralNetwork {
     int getOutNeurons() { return outNeurons; };
     double getEpsilon() { return epsilon; };
     double getLearningrate() { return learningrate; };
+    CurrentActivationFunction getCurrentActivationFunction() {
+        return currentActivationFunction;
+    };
+    bool getHasLearned() { return learend; };
     /**
-     * Various activation functions
+     * Setters
      */
-    double calcSigmoid(int x);
-    double calcFastSigmoid(int x);
-    double calcRelu(int x);
-    double calcRelu6(int x);
-    /**
-     * Destructor
-     */
-    ~neuralNetwork(){};
+    void setCurrentActivationFunction(CurrentActivationFunction curr) {
+        currentActivationFunction = curr;
+    };
 };
