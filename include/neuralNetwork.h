@@ -119,6 +119,8 @@ class NeuralNetwork {
         return currentActivationFunction;
     };
     bool getHasLearned() { return learend; };
+    Connection* getInToHidden() { return inToHidden; };
+    Connection* getHiddenToOut() { return hiddenToOut; };
     /**
      * Setters
      */

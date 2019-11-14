@@ -4,10 +4,17 @@
 /**
  *
  */
-Connection::Connection(int nRow, int nCol) : weights(0, 0) {
+Connection::Connection(int nRow, int nCol) {
     weights = Eigen::MatrixXd::Random(nRow, nCol);
     weights = (weights + Eigen::MatrixXd::Constant(nRow, nCol, 1.)) * 1.0 / 2.0;
     weights = (weights + Eigen::MatrixXd::Constant(nRow, nCol, -0.5));
+}
+
+/**
+ * Use with caution or consistent testing.
+ */
+void Connection::overideWeights(Eigen::MatrixXd newWeights) {
+    weights = newWeights;
 }
 
 /**
