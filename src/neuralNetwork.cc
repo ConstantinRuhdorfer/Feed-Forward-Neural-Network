@@ -1,8 +1,8 @@
 #include <layer.h>
-#include <cmath>
 #include <neuralNetwork.h>
-#include <cstdlib>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
 #include <eigen3/Eigen/Dense>
 
 /*---------------------------------------------------------------------*/
@@ -33,7 +33,9 @@ double NeuralNetwork::calcReLu(double x) { return std::max(0.0, x); }
 /**
  *
  */
-double NeuralNetwork::calcReLu6(double x) { return std::min((double)std::max(0.0, x), 6.0); }
+double NeuralNetwork::calcReLu6(double x) {
+    return std::min((double)std::max(0.0, x), 6.0);
+}
 
 /*---------------------------------------------------------------------*/
 /*                        Public                                       */
@@ -122,7 +124,8 @@ void NeuralNetwork::propagate() {
     for (int i = 0; i < (int)outNeurons; i++) {
         double net = 0;
         for (int j = 0; j < (int)hiddenNeurons; j++) {
-            net += hiddenToOut->getWeights((int)j, (int)i) * hiddenLayer->getData(j);
+            net += hiddenToOut->getWeights((int)j, (int)i) *
+                   hiddenLayer->getData(j);
             outputLayer->setData((int)i, calcActivation(net));
         }
     }
@@ -145,7 +148,7 @@ void NeuralNetwork::backpropagate(Eigen::VectorXd teach) {
             for (int j = 0; j < (int)hiddenNeurons; j++) {
                 deltaH(j) += delta * hiddenToOut->getWeights(j, i);
                 hiddenToOut->addWeight(
-                        j, i, (learningrate * delta * hiddenLayer->getData(j)));
+                    j, i, (learningrate * delta * hiddenLayer->getData(j)));
             }
         }
 
@@ -155,7 +158,7 @@ void NeuralNetwork::backpropagate(Eigen::VectorXd teach) {
 
             for (int j = 0; j < (int)inNeurons; j++) {
                 inToHidden->addWeight(
-                        j, i, (learningrate * delta * inputLayer->getData(j)));
+                    j, i, (learningrate * delta * inputLayer->getData(j)));
             }
         }
     }
