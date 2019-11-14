@@ -2,6 +2,10 @@
 
 Welcome to this project!
 
+## External
+
+This porject uses the Eigen3 library.
+
 ## Usage
 
 This is intended to be used with the script build.sh.
