@@ -57,6 +57,8 @@ double NeuralNetwork::calcActivation(int x) {
             return calcRelu6(x);
             break;
         default:
+            throw new std::invalid_argument(
+                "Was not one of sigmoid, fast sigmoid, relu or relu6.");
             break;
     }
 };
