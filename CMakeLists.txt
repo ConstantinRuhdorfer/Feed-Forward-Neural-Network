@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(cc-neuralNetwork)
 
+find_package (Eigen3 3.3.7 REQUIRED NO_MODULE)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/_build)
 
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
@@ -9,6 +11,7 @@ if(EXISTS "${LOC_PATH}")
 endif()
 
 include_directories(include)
+include_directories(/usr/local/include)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -17,6 +20,7 @@ file(GLOB SOURCES "src/*.cc" "src/**/*.cc")
 add_library(neuralNetwork SHARED ${SOURCES})
 
 add_executable(main ${SOURCES})
+target_link_libraries(main Eigen3::Eigen)
 
 #install(FILES ${CMAKE_BINARY_DIR}/)
 
@@ -26,4 +30,5 @@ target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
 
 file(GLOB TEST_SOURCES "tests/*.cc" "src/**/*.cc" "src/*.cc")
 add_executable(tests ${TEST_SOURCES})
+target_link_libraries(tests Eigen3::Eigen)
 target_link_libraries(tests Catch)
