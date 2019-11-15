@@ -7,6 +7,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@master
+        - name: Install new CMake version
+          run: sudo apt update && sudo apt install cmake  
         - name: Install eigen3
           run: sudo apt install libeigen3-dev
         - name: Run tests
