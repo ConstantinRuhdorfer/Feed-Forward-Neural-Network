@@ -30,9 +30,6 @@ class Connection {
     Connection(int nRow, int nCol);
     ~Connection(){};
     void overrideWeights(Eigen::MatrixXd newWeights);
-    /**
-     * Weight calculation
-     */
     void addWeight(int rowIndex, int colIndex, double data);
     /**
      * Getter
