@@ -44,17 +44,17 @@ class NeuralNetwork {
     bool learend = false;
 
     /**
-     * Network housekeeping
-     */
-    void initialize();
-
-    /**
      * Various activation functions
      */
     static double calcSigmoid(double x);
     static double calcFastSigmoid(double x);
     static double calcReLu(double x);
     static double calcReLu6(double x);
+
+    /**
+     * Network housekeeping
+     */
+    void initialize();
 
    public:
     /**
@@ -85,9 +85,6 @@ class NeuralNetwork {
           learningrate(learningrate) {
         initialize();
     };
-    /**
-     * Destructor
-     */
     ~NeuralNetwork() {
         delete inputLayer;
         delete hiddenLayer;
