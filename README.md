@@ -4,7 +4,7 @@ Welcome to this project!
 
 ## External
 
-This porject uses the Eigen3 library.
+This project uses the Eigen3 library.
 
 ## Usage
 
